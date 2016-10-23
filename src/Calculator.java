@@ -6,12 +6,13 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 
+
 public class Calculator {
   /**.
    * 
    */
-  public static void main() throws ExpressionException {
-    final Logger Log = Logger.getLogger(Calculator.class);
+  public static void main(String[] args) throws ExpressionException {
+    //Logger log = Logger.getLogger(Calculator.class);
     Polynomial exp = new Polynomial();
     Scanner ssc = new Scanner(System.in);
     while (true) {
@@ -43,8 +44,8 @@ public class Calculator {
             e1.printStackTrace();
           }
           exp = new Polynomial(userInput);
-          //System.out.println(exp.printStringP());
-          Log.info(exp.printStringP());
+          System.out.println(exp.printStringP());
+          //log.info(exp.printStringP());
           /// System.out.println(exp.simplify("x",
           /// 2).printStringP());
         } catch (ExpressionException e1) {
@@ -58,11 +59,11 @@ public class Calculator {
         String jjz = exp.derivativeP(vv).printStringP();
         /// 判断求导的变量是否是表达式中出现过的
         if (jjz.equals("0")) {
-          //System.out.println("Error, no variable");
-          Log.info("Error, no variable");
+          System.out.println("Error, no variable");
+          //log.info("Error, no variable");
         } else {
-          //System.out.println(exp.derivativeP(vv).printStringP());
-          Log.info(exp.derivativeP(vv).printStringP());
+          System.out.println(exp.derivativeP(vv).printStringP());
+          //log.info(exp.derivativeP(vv).printStringP());
         }
       } else if (mm3.find()) {
         final String ppVar = "[a-zA-Z]+\\=\\-?\\d+";
@@ -87,8 +88,8 @@ public class Calculator {
           }
           String var = ssExp.substring(0, flag);
           if (!exp.judgeVariableExist(var)) {
-            //System.out.println("Format error");
-            Log.info("Format error");
+            System.out.println("Format error");
+            //log.info("Format error");
             throw new ExpressionException("Format error");
           }
           String str = ssExp.substring(flag + 1, flag + 2);
@@ -106,21 +107,21 @@ public class Calculator {
           count++;
         }
         if (judge == 0) {
-          //System.out.println(exp.printStringP());
-          Log.info(exp.printStringP());
+          System.out.println(exp.printStringP());
+          //log.info(exp.printStringP());
         } else {
-          //System.out.println(ss.printStringP());
-          Log.info(sss.printStringP());
+          System.out.println(sss.printStringP());
+          //log.info(sss.printStringP());
         }
       } else {
-        //System.out.println("Format error");
-        Log.info("Format error");
+        System.out.println("Format error");
+        //log.info("Format error");
         throw new ExpressionException("Format error");
       }
 
       long endTime = System.currentTimeMillis();
-      //System.out.println("运行时间：" + (endTime - startTime) + "ms");
-      Log.info("运行时间：" + (endTime - startTime) + "ms");
+      System.out.println("运行时间：" + (endTime - startTime) + "ms");
+      //log.info("运行时间：" + (endTime - startTime) + "ms");
       //sc.close();
     }
   }
