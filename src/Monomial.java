@@ -130,7 +130,7 @@ public class Monomial implements Comparable<Monomial> {
             outExp = outExp + "*" + added;
           }
         } else {
-          if (outExp.equals("1") || outExp.equals("-1")) {
+          if (outExp.equals("1") | outExp.equals("-1")) {
             outExp = ss;
           } else {
             outExp = outExp + "*" + ss;
