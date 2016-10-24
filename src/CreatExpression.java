@@ -15,28 +15,33 @@ public class CreatExpression {
   
   public static boolean checkExpression(String expression) {
     // boolean flag = true;
-    Pattern p1 = Pattern.compile("[^a-zA-Z0-9\\+\\-\\*\\^\\(\\)\\s]");
-    Matcher m1 = p1.matcher(expression);
-    if (m1.find()) {
-      return false;
-    }
-    int leftParNum = 0;
-    char[] expCharArr = expression.toCharArray();
-    for (int i = 0; i < expression.length(); i++) {
-      if (expCharArr[i] == '(') {
-        leftParNum++;
-      } else if (expCharArr[i] == ')') {
-        leftParNum--;
-      }
-
-      if (leftParNum < 0) {
-        return false;
-      }
-    }
-    if (leftParNum != 0) {
-      return false;
-    }
-    return true;
+    Pattern pp = Pattern.compile(
+        "\\w+([\\^]\\d+)?(([*]\\w+)|([*]\\w+[\\^]\\d+))*"
+        + "([+-]\\w+([\\^]\\d+)?(([*]\\w+)|([*]\\w+[\\^]\\d+))*)*");
+    Matcher mm = pp.matcher(expression);
+    return mm.matches();
+  //    Pattern p1 = Pattern.compile("[^a-zA-Z0-9\\+\\-\\*\\^\\(\\)\\s]");
+  //    Matcher m1 = p1.matcher(expression);
+  //    if (m1.find()) {
+  //      return false;
+  //    }
+  //    int leftParNum = 0;
+  //    char[] expCharArr = expression.toCharArray();
+  //    for (int i = 0; i < expression.length(); i++) {
+  //      if (expCharArr[i] == '(') {
+  //        leftParNum++;
+  //      } else if (expCharArr[i] == ')') {
+  //        leftParNum--;
+  //      }
+  //
+  //      if (leftParNum < 0) {
+  //        return false;
+  //      }
+  //    }
+  //    if (leftParNum != 0) {
+  //      return false;
+  //    }
+  //    return true;
   }
   /**.
    * 
@@ -157,7 +162,6 @@ public class CreatExpression {
     while (!expNoPower.empty()) {
       result = expNoPower.pop() + result;
     }
-
     return result;
   }
   /**.

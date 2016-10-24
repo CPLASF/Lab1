@@ -3,7 +3,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 
 
 
@@ -118,7 +117,6 @@ public class Calculator {
         //log.info("Format error");
         throw new ExpressionException("Format error");
       }
-
       long endTime = System.currentTimeMillis();
       System.out.println("运行时间：" + (endTime - startTime) + "ms");
       //log.info("运行时间：" + (endTime - startTime) + "ms");

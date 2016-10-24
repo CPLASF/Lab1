@@ -70,14 +70,14 @@ public class Polynomial {
    * 
    */
   
-  public Polynomial derivativeP(String v) {
+  public Polynomial derivativeP(String vv) {
     Polynomial der = new Polynomial();
     der.variableP = new TreeMap<Monomial, Integer>();
     @SuppressWarnings("rawtypes")
     Iterator it = this.variableP.keySet().iterator();
     while (it.hasNext()) {
       Monomial mm = (Monomial) it.next();
-      Monomial nn = mm.derivativeM(v);
+      Monomial nn = mm.derivativeM(vv);
       der.variableP.put(nn, nn.coefficient);
     }
     return der;
