@@ -3,203 +3,224 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/// µ¥ÏîÊ½Àà
+/// é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·å¼é”Ÿæ–¤æ‹·
 public class Monomial implements Comparable<Monomial> {
-	public int coefficient = 1;/// ÏµÊı
-	public int totalPower = 0;/// ×ÜÃİ´Î
-	public int numberOfVariable = 0;/// ±äÁ¿µÄ¸öÊı
-	public TreeMap<String, Integer> variableM;/// <±äÁ¿£¬±äÁ¿µÄÃİ>
+  public int coefficient = 1;/// ç³»é”Ÿæ–¤æ‹·
+  public int totalPower = 0;/// é”Ÿæ–¤æ‹·é”Ÿæ·è¾¾æ‹·
+  public int numberOfVariable = 0;/// é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿä¾¥é©æ‹·é”Ÿæ–¤æ‹· 
+  public TreeMap<String, Integer> variableM;/// <é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·>
 
-	public Monomial() {
+  public Monomial() {
 
-	}
+  }
+  /**.
+   * 
+   */
+  
+  public Monomial(String expressionM) {
+    /// String input = "35111*111*x*Y*sss";
+    variableM = new TreeMap<String, Integer>();
+    String ppFactor = "((\\d+\\^\\d+)|([a-zA-Z]+\\^\\d+)|(\\d+)|([a-zA-Z]+))";
+    Pattern p4 = Pattern.compile(ppFactor);
+    Matcher m4 = p4.matcher(expressionM);
+    while (m4.find()) {
+      /// System.out.println(m4.group());
+      String judge = "[a-zA-Z]+";
+      String m4String = m4.group();  
+      Pattern pp = Pattern.compile(judge);
+      Matcher mm = pp.matcher(m4String);
+      /// åŒ¹é”Ÿæ–¤æ‹·æ™’é”Ÿæ–¤æ‹·é”Ÿå‰¿ç¢‰æ‹·é”Ÿæ–¤æ‹·æ½œé”Ÿæ–¤æ‹·é”Ÿï¿½
+      if (mm.find()) {
+        this.totalPower++;
+        /// é”Ÿå«æ–­è¯¥æ†‹æ‹·é”Ÿæ–¤æ‹·é”Ÿè§’å‡¤æ‹·é”Ÿæ–¤æ‹·å‰é”Ÿæ–¤æ‹·è°‹é”Ÿæ–¤æ‹·å¼é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·æ­¢é”Ÿï¿½
+        if (this.variableM == null || this.variableM.containsKey(m4String) == false) {
+          this.numberOfVariable++;
+          this.variableM.put(m4String, 1);
+        } else {
+          int valueM = this.variableM.get(m4String);
+          this.variableM.remove(m4String);
+          this.variableM.put(m4String, ++valueM);
+        }
+      } else {
+        int num = Integer.parseInt(m4String);
+        this.coefficient *= num;
+      }
+    }
+  }
+  /**.
+   * 
+   */
+  
+  public int compareTo(Monomial aa) {
+    int programExit = 0;
+    if (this.totalPower > aa.totalPower) {
+      programExit = -1;
+    } else if (this.totalPower < aa.totalPower) {
+      programExit = 1;
+    } else {
+      if (this.numberOfVariable == aa.numberOfVariable) {
+        @SuppressWarnings("rawtypes")
+        Iterator itM = this.variableM.keySet().iterator();
+        @SuppressWarnings("rawtypes")
+        Iterator ita = aa.variableM.keySet().iterator();
+        while (itM.hasNext() && ita.hasNext()) {
+          String sm = (String) itM.next();
+          String sa = (String) ita.next();
+          if ((sm.equals(sa) == false)
+              || ((sm.equals(sa) == true) 
+               &&   (!this.variableM.get(sm).equals(aa.variableM.get(sa))))) {
+            if (sm.compareTo(sa) < 0) {
+              programExit = -1;
+            } else {
+              programExit = 1;
+            }
+            break;
+          } else {
+            programExit = 0;
+          }
+        }
+      } else {
+        // @SuppressWarnings("rawtypes")
+        Iterator<String> itM = this.variableM.keySet().iterator();
+        // @SuppressWarnings("rawtypes")
+        Iterator<String> ita = aa.variableM.keySet().iterator();
+        int flag = 1; /// é”Ÿå«è®¹æ‹·whileå¾ªé”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
+        while (itM.hasNext() && ita.hasNext()) {
+          String sm = (String) itM.next();
+          String sa = (String) ita.next();
+          if (sm.compareTo(sa) < 0) {
+            programExit = -1;
+            flag = 0;
+            break;
+          }  else if (sm.compareTo(sa) > 0) {
+            programExit = 1;
+            flag = 0;
+            break;
+          }
+        }
+        if (flag == 1) {
+          if (itM.hasNext() == false) {
+            programExit = -1;
+          } else {
+            programExit = 1;
+          }
+        }
+      }
+    }
+    return programExit;
+  }
+  /**.
+   * 
+   */
+  
+  public String printStringM() {
+    String outExp = String.valueOf(Math.abs(this.coefficient));
+    if (this.coefficient == 0) {
+      outExp = "0";
+    } else {
+      Iterator<String> it = this.variableM.keySet().iterator();
 
-	public Monomial(String expressionM) {
-		/// String input = "35111*111*x*Y*sss";
-		variableM = new TreeMap<String, Integer>();
-		String pFactor = "((\\d+\\^\\d+)|([a-zA-Z]+\\^\\d+)|(\\d+)|([a-zA-Z]+))";
-		Pattern p4 = Pattern.compile(pFactor);
-		Matcher m4 = p4.matcher(expressionM);
-		while (m4.find()) {
-			/// System.out.println(m4.group());
-			String judge = "[a-zA-Z]+";
-			String m4String = m4.group();
-			Pattern p = Pattern.compile(judge);
-			Matcher m = p.matcher(m4String);
-			/// Æ¥Åä³É¹¦ÕâËµÃ÷ÊÇ±äÁ¿
-			if (m.find()) {
-				this.totalPower++;
-				/// ÅĞ¶Ï¸Ã±äÁ¿ÊÇ·ñÔÚÇ°ÃæµÄ±í´ïÊ½Àï³öÏÖ¹ı
-				if (this.variableM == null || this.variableM.containsKey(m4String) == false) {
-					this.numberOfVariable++;
-					this.variableM.put(m4String, 1);
-				} else {
-					int valueM = this.variableM.get(m4String);
-					this.variableM.remove(m4String);
-					this.variableM.put(m4String, ++valueM);
-				}
-			}
-			/// Æ¥ÅäÊ§°ÜÔòËµÃ÷ÊÇÊıÁ¿
-			else {
-				int num = Integer.parseInt(m4String);
-				this.coefficient *= num;
-			}
-		}
-	}
+      while (it.hasNext()) {
+        String ss = (String) it.next();
+        if (this.variableM.get(ss) > 1) {
+          String added = ss + "^" + String.valueOf(this.variableM.get(ss));
+          if (outExp.equals("1")) {
+            outExp = added;
+          } else {
+            outExp = outExp + "*" + added;
+          }
+        } else {
+          if (outExp.equals("1") || outExp.equals("-1")) {
+            outExp = ss;
+          } else {
+            outExp = outExp + "*" + ss;
+          }
+        }
+      }
+    }
+    return outExp;
+  }
 
-	public int compareTo(Monomial a) {
-		int programExit = 0;
-		if (this.totalPower > a.totalPower) {
-			programExit = -1;
-		} else if (this.totalPower < a.totalPower) {
-			programExit = 1;
-		} else {
-			if (this.numberOfVariable == a.numberOfVariable) {
-				@SuppressWarnings("rawtypes")
-				Iterator itM = this.variableM.keySet().iterator();
-				@SuppressWarnings("rawtypes")
-				Iterator it_a = a.variableM.keySet().iterator();
-				while (itM.hasNext() && it_a.hasNext()) {
-					String S_M = (String) itM.next();
-					String S_a = (String) it_a.next();
-					if ((S_M.equals(S_a) == false)
-							|| ((S_M.equals(S_a) == true) && (!this.variableM.get(S_M).equals(a.variableM.get(S_a))))) {
-						if (S_M.compareTo(S_a) < 0) {
-							programExit = -1;
-						} else {
-							programExit = 1;
-						}
-						break;
-					} else {
-						programExit = 0;
-					}
-				}
-			} else {
-				// @SuppressWarnings("rawtypes")
-				Iterator<String> itM = this.variableM.keySet().iterator();
-				// @SuppressWarnings("rawtypes")
-				Iterator<String> it_a = a.variableM.keySet().iterator();
-				int flag = 1; /// ÅĞ¶ÏwhileÑ­»·³ö¿Ú
-				while (itM.hasNext() && it_a.hasNext()) {
-					String S_M = (String) itM.next();
-					String S_a = (String) it_a.next();
-					if (S_M.compareTo(S_a) < 0) {
-						programExit = -1;
-						flag = 0;
-						break;
-					} else if (S_M.compareTo(S_a) > 0) {
-						programExit = 1;
-						flag = 0;
-						break;
-					}
-				}
-				if (flag == 1) {
-					if (itM.hasNext() == false) {
-						programExit = -1;
-					} else {
-						programExit = 1;
-					}
-				}
-			}
-		}
-		return programExit;
-	}
+  /// é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·å¼é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
+  
+  /**.
+   * 
+   */
+  
+  public Monomial derivativeM(String vv) {
+    Monomial der = new Monomial();
+    der.variableM = new TreeMap<String, Integer>();
+    der.coefficient = this.coefficient;
+    Iterator<String> it = this.variableM.keySet().iterator();
+    int judge = 0;
+    while (it.hasNext()) {
+      String ss = (String) it.next();
+      if (ss.equals(vv)) {
+        judge = 1;
+        int index = this.variableM.get(ss);
+        if (index != 0) {
+          der.coefficient *= index;
+          if (index != 1) {
+            der.variableM.put(ss, --index);
+          }
+        }
+      } else {
+        int index = this.variableM.get(ss);
+        der.variableM.put(ss, index);
+      }
+    }
+    if (judge == 0) {
+      der.variableM.clear();
+      der.coefficient = 0;
+      der.numberOfVariable = 0;
+    }
+    return der;
+  }
 
-	public String printStringM() {
-		String outExp = String.valueOf(Math.abs(this.coefficient));
-		if (this.coefficient == 0) {
-			outExp = "0";
-		} else {
-			Iterator<String> it = this.variableM.keySet().iterator();
+  /// é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·å¼é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·å€¼
+  /**.
+   * 
+   */
+  
+  public Monomial simplify(String xx, int vv, int judge) {
+    if (judge < 0) {
+      vv = -vv;
+    }
+    Monomial mm = new Monomial();
+    mm.variableM = new TreeMap<String, Integer>();
+    mm.coefficient = this.coefficient;
+    mm.numberOfVariable = this.numberOfVariable;
+    mm.totalPower = this.totalPower;
+    Iterator<String> it = this.variableM.keySet().iterator();
+    while (it.hasNext()) {
+      String ss = it.next();
+      if (ss.equals(xx)) {
+        int index = this.variableM.get(ss);
+        mm.numberOfVariable = mm.numberOfVariable - 1;
+        mm.totalPower -= index;
+        int cof = (int) Math.pow(vv, index);
+        mm.coefficient *= cof;
+      } else {
+        int index = this.variableM.get(ss);
+        mm.variableM.put(ss, index);
+      }
+    }
+    return mm;
+  }
 
-			while (it.hasNext()) {
-				String s = (String) it.next();
-				if (this.variableM.get(s) > 1) {
-					String added = s + "^" + String.valueOf(this.variableM.get(s));
-					if (outExp.equals("1")) {
-						outExp = added;
-					} else {
-						outExp = outExp + "*" + added;
-					}
-				} else {
-					if (outExp.equals("1") | outExp.equals("-1")) {
-						outExp = s;
-					} else {
-						outExp = outExp + "*" + s;
-					}
-				}
-			}
-		}
-		return outExp;
-	}
-
-	/// µ¥ÏîÊ½Çóµ¼Êı
-	public Monomial DerivativeM(String v) {
-		Monomial der = new Monomial();
-		der.variableM = new TreeMap<String, Integer>();
-		der.coefficient = this.coefficient;
-		Iterator<String> it = this.variableM.keySet().iterator();
-		int judge = 0;
-		while (it.hasNext()) {
-			String s = (String) it.next();
-			if (s.equals(v)) {
-				judge = 1;
-				int index = this.variableM.get(s);
-				if (index != 0) {
-					der.coefficient *= index;
-					if (index != 1) {
-						der.variableM.put(s, --index);
-					}
-				}
-			} else {
-				int index = this.variableM.get(s);
-				der.variableM.put(s, index);
-			}
-		}
-		if (judge == 0) {
-			der.variableM.clear();
-			der.coefficient = 0;
-			der.numberOfVariable = 0;
-		}
-		return der;
-	}
-
-	/// µ¥ÏîÊ½´øÈëÇóÖµ
-	public Monomial simplify(String x, int v, int judge) {
-		if (judge < 0) {
-			v = -v;
-		}
-		Monomial m = new Monomial();
-		m.variableM = new TreeMap<String, Integer>();
-		m.coefficient = this.coefficient;
-		m.numberOfVariable = this.numberOfVariable;
-		m.totalPower = this.totalPower;
-		Iterator<String> it = this.variableM.keySet().iterator();
-		while (it.hasNext()) {
-			String s = it.next();
-			if (s.equals(x)) {
-				int index = this.variableM.get(s);
-				m.numberOfVariable = m.numberOfVariable - 1;
-				m.totalPower -= index;
-				int cof = (int) Math.pow(v, index);
-				m.coefficient *= cof;
-			} else {
-				int index = this.variableM.get(s);
-				m.variableM.put(s, index);
-			}
-		}
-		return m;
-	}
-
-	/// ÅĞ¶Ïµ¥ÏîÊ½ÖĞÊÇ·ñÓĞ±äÁ¿V
-	public boolean judgeVariableExist(String v) {
-		Iterator<String> it = this.variableM.keySet().iterator();
-		while (it.hasNext()) {
-			String s = (String) it.next();
-			if (s.equals(v)) {
-				return true;
-			}
-		}
-		return false;
-	}
+  /// é”Ÿå«æ–­ç¢‰æ‹·é”Ÿæ–¤æ‹·å¼é”Ÿæ–¤æ‹·é”Ÿè§’å‡¤æ‹·é”Ÿå«æ†‹æ‹·é”Ÿæ–¤æ‹·V
+  /**.
+   * 
+   */
+  
+  public boolean judgeVariableExist(String vv) {
+    Iterator<String> it = this.variableM.keySet().iterator();
+    while (it.hasNext()) {
+      String ss = (String) it.next();
+      if (ss.equals(vv)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
