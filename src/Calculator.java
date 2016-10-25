@@ -120,7 +120,7 @@ public class Calculator {
       long endTime = System.currentTimeMillis();
       System.out.println("运行时间：" + (endTime - startTime) + "ms");
       //log.info("运行时间：" + (endTime - startTime) + "ms");
-      //sc.close();
+      sc.close();
     }
   }
 }
