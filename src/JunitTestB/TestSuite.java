@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
 test1.class,   
 test2.class,  
 test3.class,  
-
+test4.class,  
+test5.class 
 })
 public class TestSuite {  
 } 
