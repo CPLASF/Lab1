@@ -147,12 +147,12 @@ public class Monomial implements Comparable<Monomial> {
 			if (s.equals(v)) {
 				judge = 1;
 				int index = this.variableM.get(s);
-				if (index != 0) {
+				//if (index != 0) {
 					der.coefficient *= index;
 					if (index != 1) {
 						der.variableM.put(s, --index);
 					}
-				}
+				//}
 			} else {
 				int index = this.variableM.get(s);
 				der.variableM.put(s, index);

@@ -18,6 +18,22 @@ public class Calculator {
 			poly = new Polynomial(userinput);
 			return poly;
 		}
+		
+		public static String derivate(String prefix, String userInput){
+			int m = prefix.length();
+			String v = userInput.substring(m);
+			String j = poly.DerivativeP(v).printStringP();
+			/// 判断求导的变量是否是表达式中出现过的
+			String out;
+			if (j.equals("0")) {
+				out = "Error, no variable";
+				//System.out.println("Error, no variable");
+			} else {
+				out = poly.DerivativeP(v).printStringP();
+				//System.out.println(poly.DerivativeP(v).printStringP());
+			}
+			return out;
+		}
 	
 	public static void main(String[] args) throws ExpressionException {
 
@@ -62,15 +78,16 @@ public class Calculator {
 				}
 			} else if (m2.find()) {
 				String prefix = m2.group();
-				int m = prefix.length();
-				String v = userInput.substring(m);
-				String j = exp.DerivativeP(v).printStringP();
-				/// 判断求导的变量是否是表达式中出现过的
-				if (j.equals("0")) {
-					System.out.println("Error, no variable");
-				} else {
-					System.out.println(exp.DerivativeP(v).printStringP());
-				}
+//				int m = prefix.length();
+//				String v = userInput.substring(m);
+//				String j = exp.DerivativeP(v).printStringP();
+//				/// 判断求导的变量是否是表达式中出现过的
+//				if (j.equals("0")) {
+//					System.out.println("Error, no variable");
+//				} else {
+//					System.out.println(exp.DerivativeP(v).printStringP());
+//				}
+				System.out.println(derivate(prefix, userInput));
 			} else if (m3.find()) {
 				String pVar = "[a-zA-Z]+\\=\\-?\\d+";
 				String pSimplify = "\\s*!simplify" + "((" + "\\s" + pVar + ")" + "+)";

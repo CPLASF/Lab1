@@ -7,7 +7,7 @@ public class test4 {
 	public static Calculator test = new Calculator();
 	@Test
 	public void test() {
-		///²âÊÔÓÃÀı1
+		///²âÊÔÓÃÀı4
 				String inputString ="test^ 9*4+5xy*test^8-56*76*ui "
 						+ "-ui*test*x^3 test	^9*4+5x*y*test^8-56*76*ui  "
 						+ "-ui*test*x^3"; 
