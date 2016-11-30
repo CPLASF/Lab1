@@ -41,7 +41,9 @@ public class Calculator {
 		while (true) {
 
 			Scanner sc = new Scanner(System.in);
-			String userInput = sc.nextLine();
+//			String userInput = sc.nextLine();
+			GetUserInput g = new GetUserInput();
+			String userInput = g.getUserInput(sc);
 			long startTime = System.currentTimeMillis();// 获取当前时间
 			/// String input = "x*x*x*y*ui*9+3*x*y*z*x";
 			String pDer = "\\s*\\!d\\/d\\s*";
@@ -57,7 +59,9 @@ public class Calculator {
 			/// 命令---求值
 			Pattern p3 = Pattern.compile(pSim);
 			Matcher m3 = p3.matcher(userInput);
-			if (!m1.find()) {
+			Control c = new Control();
+			int jud = c.judge(pass, pDer, pSim, userInput, p1, m1, p2, m2, p3, m3);
+			if (jud == 0) {
 				try {
 					
 //					CreatExpression ce = new CreatExpression();
@@ -76,7 +80,7 @@ public class Calculator {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			} else if (m2.find()) {
+			} else if (jud == 1) {
 				String prefix = m2.group();
 //				int m = prefix.length();
 //				String v = userInput.substring(m);
@@ -88,7 +92,7 @@ public class Calculator {
 //					System.out.println(exp.DerivativeP(v).printStringP());
 //				}
 				System.out.println(derivate(prefix, userInput));
-			} else if (m3.find()) {
+			} else if (jud == 2) {
 				String pVar = "[a-zA-Z]+\\=\\-?\\d+";
 				String pSimplify = "\\s*!simplify" + "((" + "\\s" + pVar + ")" + "+)";
 				Pattern pS = Pattern.compile(pVar);
